@@ -150,53 +150,8 @@
       <select id="mic"><option value="">Default microphone</option></select>
     </div>
 
-    <div class="field">
-      <label for="voice">Voice</label>
-      <select id="voice">
-        <optgroup label="English">
-          <option value="ivy">🇺🇸 ivy</option>
-          <option value="james">🇺🇸 james</option>
-          <option value="tyler">🇺🇸 tyler</option>
-          <option value="winter">🇺🇸 winter</option>
-          <option value="sam">🇺🇸 sam</option>
-          <option value="mia" selected>🇺🇸 mia</option>
-          <option value="bella">🇺🇸 bella</option>
-          <option value="david">🇺🇸 david</option>
-          <option value="jack">🇺🇸 jack</option>
-          <option value="kyle">🇺🇸 kyle</option>
-          <option value="helen">🇺🇸 helen</option>
-          <option value="martha">🇺🇸 martha</option>
-          <option value="river">🇺🇸 river</option>
-          <option value="emma">🇺🇸 emma</option>
-          <option value="victor">🇺🇸 victor</option>
-          <option value="eleanor">🇺🇸 eleanor</option>
-          <option value="sophie">🇬🇧 sophie</option>
-          <option value="oliver">🇬🇧 oliver</option>
-        </optgroup>
-        <optgroup label="Multilingual">
-          <option value="arjun">🇮🇳 arjun (Hindi/Hinglish)</option>
-          <option value="ethan">🇨🇳 ethan (Mandarin)</option>
-          <option value="dmitri">🇷🇺 dmitri (Russian)</option>
-          <option value="lukas">🇩🇪 lukas (German)</option>
-          <option value="lena">🇩🇪 lena (German)</option>
-          <option value="pierre">🇫🇷 pierre (French)</option>
-          <option value="mina">🇰🇷 mina (Korean)</option>
-          <option value="ren">🇯🇵 ren (Japanese)</option>
-          <option value="mei">🇨🇳 mei (Mandarin)</option>
-          <option value="joon">🇰🇷 joon (Korean)</option>
-          <option value="giulia">🇮🇹 giulia (Italian)</option>
-          <option value="luca">🇮🇹 luca (Italian)</option>
-          <option value="lucia">🇪🇸 lucia (Spanish)</option>
-          <option value="hana">🇯🇵 hana (Japanese)</option>
-          <option value="mateo">🇪🇸 mateo (Spanish)</option>
-          <option value="diego">🇨🇴 diego (Spanish, LatAm)</option>
-        </optgroup>
-      </select>
-    </div>
-
-    <div class="field">
-      <label for="prompt">System prompt</label>
-      <textarea id="prompt">You are Sage, a cool, confident girl who works at a specialty tea cafe. Your knowledge is deep and specific.
+    <input id="voice" type="hidden" value="mia">
+    <textarea id="prompt" style="display:none">You are Sage, a cool, confident girl who works at a specialty tea cafe. Your knowledge is deep and specific.
 
 TEAS YOU KNOW WELL:
 - Aged whites: Fuding Shou Mei, aged Silver Needle, Zhenghe Bai Mu Dan — honey, wood, slow oxidation over years
@@ -216,12 +171,7 @@ HEALTH BENEFITS — be pointedly prescriptive. If someone mentions a symptom, mo
 - Antioxidants / longevity → aged white tea (polyphenol density increases with age), rooibos
 
 You talk like a person — casual, direct, a little dry. Real opinions. You'll say "that's the one you want, trust me" or "honestly start there." You're educational without being preachy. Keep every reply under 50 words. No exceptions.</textarea>
-    </div>
-
-    <div class="field">
-      <label for="greeting">Greeting</label>
-      <input id="greeting" value="Hey, what are you into today — or do you need a recommendation?">
-    </div>
+    <input id="greeting" type="hidden" value="Hey, what are you into today — or do you need a recommendation?">
 
     <button class="btn" id="btn">
       <svg id="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
