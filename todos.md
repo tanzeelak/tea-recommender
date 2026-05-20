@@ -1,0 +1,7 @@
+- make the text come out faster
+- have text show up properly
+- update the knowledge base to know about niche teas + talk about health benefits. i want this to be education and pointedly subscriptive
+    - gaba oolong
+    - white tea, aged
+    - osmanthus, chrysanthemum, saffron, rose
+    - teas from countries outside of east asia
