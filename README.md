@@ -26,7 +26,7 @@ The AssemblyAI API key is pre-configured. Click **Connect** to start talking to 
 
 ## Screenshot
 
-![Sage](Screenshot%202026-05-19%20at%207.24.10%20PM.png)
+![Sage](screenshot.png)
 
 ## File structure
 
