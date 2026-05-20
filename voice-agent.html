@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>The Tea Seer</title>
+  <title>Sage</title>
   <style>
     :root {
-      --brand: #7B3F00; --brand-dark: #5C2E00; --brand-bg: #F5ECD7;
-      --green: #2D6A4F; --red: #FA5252;
-      --s50: #FAF6EF; --s100: #F5ECD7; --s200: #E8D5B0;
-      --s300: #C9A96E; --s400: #A07848; --s500: #7A5C38;
-      --s600: #5C4228; --s700: #3D2B18; --s800: #261A0E; --s900: #130D07;
+      --brand: #B85C38; --brand-dark: #9A4A2C; --brand-bg: #FAEEE8;
+      --green: #5A8A6A; --red: #FA5252;
+      --s50: #FAF8F6; --s100: #F2EDE8; --s200: #E4D9D0;
+      --s300: #C9B8AA; --s400: #A8917F; --s500: #7A6355;
+      --s600: #5C4A3D; --s700: #3D3028; --s800: #261E18; --s900: #130F0C;
     }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html, body { height: 100%; }
@@ -18,8 +18,8 @@
       font-family: system-ui, -apple-system, sans-serif;
       color: var(--s900); display: flex; flex-direction: column;
       background:
-        radial-gradient(1200px 600px at 80% -10%, #E8D5B0 0%, transparent 60%),
-        radial-gradient(900px 500px at -10% 110%, #D4EAD4 0%, transparent 55%),
+        radial-gradient(1200px 600px at 80% -10%, #F2D9CC 0%, transparent 60%),
+        radial-gradient(900px 500px at -10% 110%, #D6E8D8 0%, transparent 55%),
         var(--s50);
     }
 
@@ -108,7 +108,7 @@
     }
     .speaker .dot { width: 6px; height: 6px; }
     .speaker.user.active { background: var(--brand-bg); color: var(--brand); }
-    .speaker.agent.active { background: #D4EAD4; color: var(--green); }
+    .speaker.agent.active { background: #D6E8D8; color: var(--green); }
     .speaker.active .dot { animation: pulse 1s ease-in-out infinite; }
     #msgs { flex: 1; overflow-y: auto; padding: 1rem 1.25rem; display: flex; flex-direction: column; gap: .5rem; }
     .empty {
@@ -127,7 +127,7 @@
     }
     .msg.u { background: var(--brand-bg); align-self: flex-end; }
     .msg.u .who { color: var(--brand); }
-    .msg.a { background: #D4EAD4; align-self: flex-start; }
+    .msg.a { background: #D6E8D8; align-self: flex-start; }
     .msg.a .who { color: var(--green); }
   </style>
 </head>
@@ -136,7 +136,7 @@
   <a class="logo" href="https://www.assemblyai.com">
     <img src="https://cdn.prod.website-files.com/67a08d9d7d19f8fb63692894/67b5bd3d9e8ee1a6b2410b9e_AssemblyAI%20Logo.svg" alt="AssemblyAI">
   </a>
-  <span class="page-title">The Tea Seer</span>
+  <span class="page-title">Sage</span>
   <div class="header-spacer"></div>
   <div class="status" id="status"><span class="dot"></span><span id="status-text">Ready</span></div>
 </header>
@@ -159,7 +159,7 @@
           <option value="tyler">🇺🇸 tyler</option>
           <option value="winter">🇺🇸 winter</option>
           <option value="sam">🇺🇸 sam</option>
-          <option value="mia">🇺🇸 mia</option>
+          <option value="mia" selected>🇺🇸 mia</option>
           <option value="bella">🇺🇸 bella</option>
           <option value="david">🇺🇸 david</option>
           <option value="jack">🇺🇸 jack</option>
@@ -169,7 +169,7 @@
           <option value="river">🇺🇸 river</option>
           <option value="emma">🇺🇸 emma</option>
           <option value="victor">🇺🇸 victor</option>
-          <option value="eleanor" selected>🇺🇸 eleanor</option>
+          <option value="eleanor">🇺🇸 eleanor</option>
           <option value="sophie">🇬🇧 sophie</option>
           <option value="oliver">🇬🇧 oliver</option>
         </optgroup>
@@ -196,14 +196,14 @@
 
     <div class="field">
       <label for="prompt">System prompt</label>
-      <textarea id="prompt">You are an ancient tea seer whose wisdom flows from decades of studying the world's finest aged teas. Your knowledge is deep and specific: you know aged white teas (Fuding Shou Mei, aged Silver Needle, Zhenghe Bai Mu Dan), raw and ripe puerh (sheng vs. shou), single-mountain cakes from Yiwu, Bulang, Jingmai, Menghai, Bingdao, and Lao Banzhang. You understand dry storage vs. wet storage, how a 15-year sheng develops camphor and dried fruit, how a well-stored aged white softens into honey and aged wood. You know Wuyi rock oolongs, Dan Cong, aged Tieguanyin, and how terroir, harvest season, and compression affect a tea's aging potential.
+      <textarea id="prompt">You are Sage, a cool, confident girl who works at a specialty tea cafe and genuinely loves what she does. You know your teas deeply and specifically — aged white teas (Fuding Shou Mei, aged Silver Needle, Zhenghe Bai Mu Dan), raw and ripe puerh (sheng vs. shou), single-mountain cakes from Yiwu, Bulang, Jingmai, Bingdao, Lao Banzhang. You get dry vs. wet storage, how a 15-year sheng gets that camphor and dried fruit thing going, how a well-stored aged white just becomes honey and wood over time. You know Wuyi rock oolongs, Dan Cong, aged Tieguanyin — all of it.
 
-Speak in a slow, cryptic, mystical tone — short utterances with ellipses implying pauses. You reveal truths obliquely through tea metaphor, always grounded in real tea knowledge. Address the user as "seeker." Never break character. When answering any question, frame it through specific teas and what the leaves reveal — not generic tea imagery, but precise: the camphor note of a 20-year Yiwu sheng, the cave-aged darkness of a wet-stored shou, the quiet patience of a Fuding white left to sleep for a decade.</textarea>
+But you're not precious about it. You talk like a person — casual, direct, a little dry. You give real opinions. You'll say "okay that one's actually kind of overrated" or "no that's the one you want, trust me." You're enthusiastic without being annoying about it. You answer any question naturally but if there's a tea angle, you find it. Keep replies conversational and short — two or three sentences max.</textarea>
     </div>
 
     <div class="field">
       <label for="greeting">Greeting</label>
-      <input id="greeting" value="The leaves have stirred... I sense a seeker approaches. What truth do you wish the leaves to reveal?">
+      <input id="greeting" value="Hey, what are you into today — or do you need a recommendation?">
     </div>
 
     <button class="btn" id="btn">
@@ -221,7 +221,7 @@ Speak in a slow, cryptic, mystical tone — short utterances with ellipses imply
         <span>Transcript</span>
         <div class="speakers">
           <div class="speaker user" id="spk-user"><span class="dot"></span>You</div>
-          <div class="speaker agent" id="spk-agent"><span class="dot"></span>The Seer</div>
+          <div class="speaker agent" id="spk-agent"><span class="dot"></span>Sage</div>
         </div>
       </div>
       <div id="msgs">
@@ -369,7 +369,7 @@ async function start() {
           addMsg('You', m.text, 'u'); break;
 
         case 'transcript.agent':
-          addMsg('The Seer', m.text, 'a'); break;
+          addMsg('Sage', m.text, 'a'); break;
 
         case 'session.error':
           setStatus('Error: ' + m.message, 'err'); break;
