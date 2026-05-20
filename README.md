@@ -24,6 +24,10 @@ Open `voice-agent.html` directly in a browser. No server needed.
 
 The AssemblyAI API key is pre-configured. Click **Connect** to start talking to Sage.
 
+## Screenshot
+
+![Sage](Screenshot%202026-05-19%20at%207.24.10%20PM.png)
+
 ## File structure
 
 ```
