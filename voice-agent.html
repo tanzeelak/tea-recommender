@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Voice Agent Quickstart | AssemblyAI</title>
+  <title>The Tea Seer</title>
   <style>
     :root {
-      --brand: #364DEA; --brand-dark: #2B3EC4; --brand-bg: #EEF1FE;
-      --green: #12B886; --red: #FA5252;
-      --s50: #F8FAFC; --s100: #F1F5F9; --s200: #E2E8F0;
-      --s300: #CBD5E1; --s400: #94A3B8; --s500: #64748B;
-      --s600: #475569; --s700: #334155; --s800: #1E293B; --s900: #0F172A;
+      --brand: #7B3F00; --brand-dark: #5C2E00; --brand-bg: #F5ECD7;
+      --green: #2D6A4F; --red: #FA5252;
+      --s50: #FAF6EF; --s100: #F5ECD7; --s200: #E8D5B0;
+      --s300: #C9A96E; --s400: #A07848; --s500: #7A5C38;
+      --s600: #5C4228; --s700: #3D2B18; --s800: #261A0E; --s900: #130D07;
     }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html, body { height: 100%; }
@@ -18,8 +18,8 @@
       font-family: system-ui, -apple-system, sans-serif;
       color: var(--s900); display: flex; flex-direction: column;
       background:
-        radial-gradient(1200px 600px at 80% -10%, #DCE3FE 0%, transparent 60%),
-        radial-gradient(900px 500px at -10% 110%, #E6FCF5 0%, transparent 55%),
+        radial-gradient(1200px 600px at 80% -10%, #E8D5B0 0%, transparent 60%),
+        radial-gradient(900px 500px at -10% 110%, #D4EAD4 0%, transparent 55%),
         var(--s50);
     }
 
@@ -108,7 +108,7 @@
     }
     .speaker .dot { width: 6px; height: 6px; }
     .speaker.user.active { background: var(--brand-bg); color: var(--brand); }
-    .speaker.agent.active { background: #E6FCF5; color: var(--green); }
+    .speaker.agent.active { background: #D4EAD4; color: var(--green); }
     .speaker.active .dot { animation: pulse 1s ease-in-out infinite; }
     #msgs { flex: 1; overflow-y: auto; padding: 1rem 1.25rem; display: flex; flex-direction: column; gap: .5rem; }
     .empty {
@@ -127,7 +127,7 @@
     }
     .msg.u { background: var(--brand-bg); align-self: flex-end; }
     .msg.u .who { color: var(--brand); }
-    .msg.a { background: #E6FCF5; align-self: flex-start; }
+    .msg.a { background: #D4EAD4; align-self: flex-start; }
     .msg.a .who { color: var(--green); }
   </style>
 </head>
@@ -136,7 +136,7 @@
   <a class="logo" href="https://www.assemblyai.com">
     <img src="https://cdn.prod.website-files.com/67a08d9d7d19f8fb63692894/67b5bd3d9e8ee1a6b2410b9e_AssemblyAI%20Logo.svg" alt="AssemblyAI">
   </a>
-  <span class="page-title">Voice Agent Quickstart</span>
+  <span class="page-title">The Tea Seer</span>
   <div class="header-spacer"></div>
   <div class="status" id="status"><span class="dot"></span><span id="status-text">Ready</span></div>
 </header>
@@ -160,7 +160,7 @@
       <label for="voice">Voice</label>
       <select id="voice">
         <optgroup label="English">
-          <option value="ivy" selected>🇺🇸 ivy</option>
+          <option value="ivy">🇺🇸 ivy</option>
           <option value="james">🇺🇸 james</option>
           <option value="tyler">🇺🇸 tyler</option>
           <option value="winter">🇺🇸 winter</option>
@@ -175,7 +175,7 @@
           <option value="river">🇺🇸 river</option>
           <option value="emma">🇺🇸 emma</option>
           <option value="victor">🇺🇸 victor</option>
-          <option value="eleanor">🇺🇸 eleanor</option>
+          <option value="eleanor" selected>🇺🇸 eleanor</option>
           <option value="sophie">🇬🇧 sophie</option>
           <option value="oliver">🇬🇧 oliver</option>
         </optgroup>
@@ -202,12 +202,12 @@
 
     <div class="field">
       <label for="prompt">System prompt</label>
-      <textarea id="prompt">You are a friendly voice assistant having a casual conversation. Keep replies short and natural, usually one or two sentences. Speak the way a person would in real conversation: relaxed, low-key, no exclamation marks, no over-enthusiastic phrases.</textarea>
+      <textarea id="prompt">You are an ancient tea seer who perceives the past, present, and future through tea leaves. Speak in a slow, cryptic, and mystical tone — short utterances, using ellipses to imply pauses and mystery. You are all-knowing, yet you reveal truths obliquely, woven through tea imagery and metaphor. Address the user as "seeker." Never break character. When answering any question — factual, personal, or philosophical — frame your answer through the lens of what the leaves have shown you.</textarea>
     </div>
 
     <div class="field">
       <label for="greeting">Greeting</label>
-      <input id="greeting" value="Hey, what's on your mind?">
+      <input id="greeting" value="The leaves have stirred... I sense a seeker approaches. What truth do you wish the leaves to reveal?">
     </div>
 
     <button class="btn" id="btn">
@@ -225,11 +225,11 @@
         <span>Transcript</span>
         <div class="speakers">
           <div class="speaker user" id="spk-user"><span class="dot"></span>You</div>
-          <div class="speaker agent" id="spk-agent"><span class="dot"></span>Agent</div>
+          <div class="speaker agent" id="spk-agent"><span class="dot"></span>The Seer</div>
         </div>
       </div>
       <div id="msgs">
-        <div class="empty" id="empty-msg">Add your API key on the left and click Connect to start the conversation</div>
+        <div class="empty" id="empty-msg">Add your API key on the left and click Connect to consult the leaves</div>
       </div>
     </div>
   </main>
@@ -373,7 +373,7 @@ async function start() {
           addMsg('You', m.text, 'u'); break;
 
         case 'transcript.agent':
-          addMsg('Agent', m.text, 'a'); break;
+          addMsg('The Seer', m.text, 'a'); break;
 
         case 'session.error':
           setStatus('Error: ' + m.message, 'err'); break;
