@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sage: Your tea-savvy friend</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <style>
     :root {
       --brand: #B85C38; --brand-dark: #9A4A2C; --brand-bg: #FAEEE8;
@@ -45,7 +47,8 @@
     .status.err { color: var(--red); background: #FFF5F5; border-color: #FFE3E3; }
     @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: .3; } }
 
-    .layout { flex: 1; display: grid; grid-template-columns: 360px 1fr; min-height: 0; }
+    .layout { flex: 1; display: grid; grid-template-columns: 360px 1fr 380px; min-height: 0; }
+    @media (max-width: 1100px) { .layout { grid-template-columns: 320px 1fr; } .map-panel { display: none; } }
     @media (max-width: 800px) { .layout { grid-template-columns: 1fr; } }
 
     aside {
@@ -129,6 +132,27 @@
     .msg.u .who { color: var(--brand); }
     .msg.a { background: #D6E8D8; align-self: flex-start; }
     .msg.a .who { color: var(--green); }
+
+    .map-panel {
+      border-left: 1px solid var(--s200);
+      background: rgba(255,255,255,.6); backdrop-filter: blur(8px);
+      display: flex; flex-direction: column; min-height: 0;
+    }
+    .map-hd {
+      padding: .75rem 1.25rem; background: var(--s50); border-bottom: 1px solid var(--s200);
+      font-size: .6875rem; font-weight: 600; color: var(--s500);
+      text-transform: uppercase; letter-spacing: .08em; flex-shrink: 0;
+    }
+    #map { flex: 1; min-height: 0; background: var(--s100); }
+    .map-info {
+      padding: 1rem 1.25rem; border-top: 1px solid var(--s200); flex-shrink: 0;
+      background: rgba(255,255,255,.7);
+    }
+    .map-info .tea-name { font-size: 1rem; font-weight: 600; color: var(--brand-dark); margin-bottom: .25rem; }
+    .map-info .tea-origin { font-size: .8125rem; color: var(--s500); }
+    .map-info.empty .tea-name { color: var(--s400); font-weight: 500; }
+    .leaflet-popup-content { font-family: system-ui, -apple-system, sans-serif; }
+    .leaflet-popup-content b { color: var(--brand-dark); }
   </style>
 </head>
 <body>
@@ -208,11 +232,79 @@ Be direct and prescriptive. Don't hedge. Say "get the GABA oolong" not "you migh
       </div>
     </div>
   </main>
+
+  <div class="map-panel">
+    <div class="map-hd">Tea Origin Map</div>
+    <div id="map"></div>
+    <div class="map-info empty" id="map-info">
+      <div class="tea-name" id="map-tea">No tea detected yet</div>
+      <div class="tea-origin" id="map-origin">Ask Sage about a tea to see where it comes from.</div>
+    </div>
+  </div>
 </div>
 
 <script>
 const $ = (id) => document.getElementById(id);
 const RATE = 24_000;
+
+// --- Tea origin map ---
+// Keywords are matched (case-insensitive) against Sage's transcript.
+// More specific entries should appear before broader ones.
+const TEA_ORIGINS = [
+  { kw: ['lao banzhang', 'banzhang'], tea: 'Lao Banzhang Sheng Puerh', origin: 'Bulang Mountain, Yunnan, China', lat: 21.94, lng: 100.42 },
+  { kw: ['bingdao'], tea: 'Bingdao Sheng Puerh', origin: 'Lincang, Yunnan, China', lat: 23.77, lng: 100.05 },
+  { kw: ['jingmai'], tea: 'Jingmai Mountain Puerh', origin: 'Jingmai, Yunnan, China', lat: 22.18, lng: 100.00 },
+  { kw: ['bulang'], tea: 'Bulang Mountain Puerh', origin: 'Bulang Mountain, Yunnan, China', lat: 21.96, lng: 100.45 },
+  { kw: ['yiwu'], tea: 'Yiwu Sheng Puerh', origin: 'Yiwu, Yunnan, China', lat: 21.93, lng: 101.42 },
+  { kw: ['puerh', 'pu-erh', 'pu erh', 'sheng', 'shou'], tea: 'Puerh', origin: 'Yunnan, China', lat: 22.78, lng: 100.97 },
+  { kw: ['fuding', 'silver needle', 'shou mei', 'bai mu dan', 'white tea', 'aged white'], tea: 'Aged White Tea', origin: 'Fuding, Fujian, China', lat: 27.20, lng: 120.22 },
+  { kw: ['zhenghe'], tea: 'Zhenghe White Tea', origin: 'Zhenghe, Fujian, China', lat: 27.37, lng: 118.85 },
+  { kw: ['wuyi', 'rock oolong'], tea: 'Wuyi Rock Oolong', origin: 'Wuyi Mountains, Fujian, China', lat: 27.72, lng: 117.97 },
+  { kw: ['tieguanyin', 'tie guan yin'], tea: 'Aged Tieguanyin', origin: 'Anxi, Fujian, China', lat: 25.06, lng: 118.19 },
+  { kw: ['dan cong', 'dancong', 'phoenix'], tea: 'Dan Cong Oolong', origin: 'Phoenix Mountain, Guangdong, China', lat: 23.75, lng: 116.62 },
+  { kw: ['gaba oolong', 'gaba'], tea: 'GABA Oolong', origin: 'Taiwan', lat: 23.70, lng: 120.96 },
+  { kw: ['darjeeling'], tea: 'Darjeeling First Flush', origin: 'Darjeeling, India', lat: 27.04, lng: 88.26 },
+  { kw: ['nilgiri'], tea: 'Nilgiri Black Tea', origin: 'Nilgiri Hills, India', lat: 11.41, lng: 76.70 },
+  { kw: ['ceylon'], tea: 'Ceylon Black Tea', origin: 'Sri Lanka', lat: 6.95, lng: 80.78 },
+  { kw: ['kenyan purple', 'purple tea', 'kenyan'], tea: 'Kenyan Purple Tea', origin: 'Kericho Highlands, Kenya', lat: -0.37, lng: 35.28 },
+  { kw: ['moroccan mint', 'moroccan'], tea: 'Moroccan Mint', origin: 'Morocco', lat: 31.79, lng: -7.09 },
+  { kw: ['rooibos', 'honeybush'], tea: 'Rooibos & Honeybush', origin: 'Cederberg, South Africa', lat: -32.30, lng: 19.10 },
+  { kw: ['nepali', 'nepal'], tea: 'Nepali Oolong', origin: 'Ilam, Nepal', lat: 26.91, lng: 87.93 },
+  { kw: ['saffron'], tea: 'Saffron Tea', origin: 'Kashmir & Iran', lat: 34.08, lng: 74.80 },
+  { kw: ['osmanthus'], tea: 'Osmanthus Blend', origin: 'Guilin, China', lat: 25.27, lng: 110.29 },
+  { kw: ['chrysanthemum'], tea: 'Chrysanthemum', origin: 'Hangzhou / Huangshan, China', lat: 30.13, lng: 118.17 },
+  { kw: ['rose'], tea: 'Rose Tea', origin: 'Pingyin, China', lat: 36.30, lng: 116.46 },
+];
+
+let teaMap, teaMarker;
+
+function initMap() {
+  if (teaMap) return;
+  teaMap = L.map('map', { zoomControl: true, attributionControl: false }).setView([25, 90], 3);
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+    maxZoom: 18,
+  }).addTo(teaMap);
+}
+
+function detectOrigin(text) {
+  if (!text) return;
+  const t = text.toLowerCase();
+  const hit = TEA_ORIGINS.find(o => o.kw.some(k => t.includes(k)));
+  if (hit) showOrigin(hit);
+}
+
+function showOrigin(o) {
+  initMap();
+  teaMap.flyTo([o.lat, o.lng], 5, { duration: 1.2 });
+  if (teaMarker) teaMarker.remove();
+  teaMarker = L.marker([o.lat, o.lng]).addTo(teaMap)
+    .bindPopup(`<b>${o.tea}</b><br>${o.origin}`).openPopup();
+  $('map-info').classList.remove('empty');
+  $('map-tea').textContent = o.tea;
+  $('map-origin').textContent = o.origin;
+}
+
+initMap();
 
 // Inline AudioWorklet that captures mic as PCM16 and posts to main thread
 const workletUrl = URL.createObjectURL(new Blob([`
@@ -348,7 +440,9 @@ async function start() {
           addMsg('You', m.text, 'u'); break;
 
         case 'transcript.agent':
-          addMsg('Sage: Your tea-savvy friend', m.text, 'a'); break;
+          addMsg('Sage: Your tea-savvy friend', m.text, 'a');
+          detectOrigin(m.text);
+          break;
 
         case 'session.error':
           setStatus('Error: ' + m.message, 'err'); break;
